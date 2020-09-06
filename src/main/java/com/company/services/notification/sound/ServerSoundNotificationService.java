@@ -1,4 +1,4 @@
-package com.company.services.notification.Sound;
+package com.company.services.notification.sound;
 
 import com.company.services.notification.IObserver;
 
