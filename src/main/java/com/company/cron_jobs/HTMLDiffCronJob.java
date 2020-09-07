@@ -7,6 +7,7 @@ import com.company.services.logger.ILogger;
 import com.company.services.notification.EmailNotificationService;
 import com.company.services.notification.IObserver;
 import com.company.services.notification.ISubject;
+import com.company.services.notification.email.EmailMessage;
 import com.company.services.notification.sound.ServerSoundNotificationService;
 import com.company.services.notification.email.EmailService;
 import com.typesafe.config.Config;
@@ -49,16 +50,20 @@ public class HTMLDiffCronJob extends CronJob implements ISubject {
         //loggers set up
         List<ILogger> loggers = new ArrayList<ILogger>() { {  add(successLogger); add(new EmailLogger(emailService));  } };
         errorLogger = new BatchOfLoggeres(loggers);
-        //observers
-        EmailNotificationService emailNotificationService = new EmailNotificationService(emailService);
-        ServerSoundNotificationService serverSoundNotificationService = new ServerSoundNotificationService();
-        observerList.add(emailNotificationService);
-        observerList.add(serverSoundNotificationService);
         try {
             config = ConfigFactory.parseFile(new File(getClass().getResource("/html_files.conf").toURI()));
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
+        //observers
+        EmailMessage emailMessage = new EmailMessage();
+        emailMessage.setSubject("html changed");
+        emailMessage.setText(config.getString("configuration.url"));
+        EmailNotificationService emailNotificationService = new EmailNotificationService(emailService, emailMessage);
+        ServerSoundNotificationService serverSoundNotificationService = new ServerSoundNotificationService();
+        observerList.add(emailNotificationService);
+        observerList.add(serverSoundNotificationService);
+
     }
 
     @Override
