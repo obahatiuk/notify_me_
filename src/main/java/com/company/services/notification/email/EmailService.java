@@ -26,9 +26,10 @@ public class EmailService {
             props.setProperty("mail.smtp.host", "smtp.gmail.com");
             props.setProperty("mail.smtp.socketFactory.class", SSL_FACTORY);
             props.setProperty("mail.smtp.socketFactory.fallback", "false");
-            props.setProperty("mail.smtp.port", "4065");
-            props.setProperty("mail.smtp.socketFactory.port", "4065");
+            props.setProperty("mail.smtp.port", "465");
+            props.setProperty("mail.smtp.socketFactory.port", "465");
             props.put("mail.smtp.auth", "true");
+            props.put("mail.debug", "true");
             props.put("mail.store.protocol", "pop3");
             props.put("mail.transport.protocol", "smtp");
         }
