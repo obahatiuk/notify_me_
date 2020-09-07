@@ -7,7 +7,7 @@ import com.company.services.logger.ILogger;
 import com.company.services.notification.EmailNotificationService;
 import com.company.services.notification.IObserver;
 import com.company.services.notification.ISubject;
-import com.company.services.notification.Sound.ServerSoundNotificationService;
+import com.company.services.notification.sound.ServerSoundNotificationService;
 import com.company.services.notification.email.EmailService;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
@@ -89,13 +89,15 @@ public class HTMLDiffCronJob extends CronJob implements ISubject {
                 }
                 successLogger.log("no changes on: " + new Date());
             } else {
-                successLogger.log("html changed during run on: " + new Date());
                 String retrospective = new String(Files.readAllBytes(puppies_page.toPath()));
                 if (!retrospective.equals(out)) {
+                    successLogger.log("html changed during run on: " + new Date());
                     notifyObservers();
                     try(PrintWriter pw = new PrintWriter(new FileOutputStream(config.getString("configuration.file_name"), false))) {
                         pw.print(out);
                     }
+                } else {
+                    successLogger.log("no changes on: " + new Date());
                 }
             }
             successLogger.log("success run on: " + new Date());
