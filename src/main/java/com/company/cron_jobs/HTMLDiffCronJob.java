@@ -82,14 +82,14 @@ public class HTMLDiffCronJob extends CronJob implements ISubject {
     public void run() {
         try{
             String out = new Scanner(new URL(config.getString("configuration.url")).openStream(), "UTF-8").useDelimiter("\\A").next();
-            File puppies_page = new File(config.getString("configuration.file_name"));
-            if (puppies_page.createNewFile()) {
-                try(PrintWriter pw = new PrintWriter(puppies_page)){
+            File page = new File(config.getString("configuration.file_name"));
+            if (page.createNewFile()) {
+                try(PrintWriter pw = new PrintWriter(page)){
                     pw.print(out);
                 }
                 successLogger.log("no changes on: " + new Date());
             } else {
-                String retrospective = new String(Files.readAllBytes(puppies_page.toPath()));
+                String retrospective = new String(Files.readAllBytes(page.toPath()));
                 if (!retrospective.equals(out)) {
                     successLogger.log("html changed during run on: " + new Date());
                     notifyObservers();
