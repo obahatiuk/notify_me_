@@ -25,10 +25,12 @@ public class Runner {
             };
         };
         t.schedule(tt, 0,config.getInt("configuration.frequency"));
+        System.out.println("task scheduled");
     }
 
     public void stop() {
         tt.cancel();
         t.cancel();
+        System.out.println("task stopped");
     }
 }
